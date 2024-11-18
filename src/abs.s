@@ -16,12 +16,14 @@
 # =================================================================
 abs:
     # Prologue
-    ebreak
     # Load number from memory
     lw t0 0(a0)
     bge t0, zero, done
-
-    # TODO: Add your own implementation
+# -----------------------------------------------------------------
+    # If the number is negative, make it positive
+    neg t0, t0
+    sw t0, 0(a0)
+# -----------------------------------------------------------------
 
 done:
     # Epilogue

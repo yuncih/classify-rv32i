@@ -115,8 +115,26 @@ inner_loop_start:
     j inner_loop_start
     
 inner_loop_end:
-    # TODO: Add your own implementation
-
+    #--------------------------------------------------------------
+    addi s0, s0, 1          # Increment outer loop counter (row of M0)
+    li t1, 0                # Initialize t1 to 0
+    slli t1, a2, 2          # t1 = a2 << 2
+    add s3, s3, t1          # Add t1 to s3 (update s3)
+    j outer_loop_start      # Jump to outer loop start
+    #--------------------------------------------------------------
+#--------------------------------------------------------------
+outer_loop_end:
+    # Epilogue: Restore registers
+    lw ra, 0(sp)
+    lw s0, 4(sp)
+    lw s1, 8(sp)
+    lw s2, 12(sp)
+    lw s3, 16(sp)
+    lw s4, 20(sp)
+    lw s5, 24(sp)
+    addi sp, sp, 28
+    jr ra
+#--------------------------------------------------------------
 error:
     li a0, 38
     j exit

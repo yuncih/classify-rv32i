@@ -31,15 +31,66 @@ dot:
     blt a3, t0, error_terminate   
     blt a4, t0, error_terminate  
 
-    li t0, 0            
-    li t1, 0         
+    li t0, 0
+    li t1, 0
+    addi sp, sp, -4
+    sw s0, 0(sp)
 
 loop_start:
     bge t1, a2, loop_end
-    # TODO: Add your own implementation
+
+    slli t2, t1, 2
+    add t2, t2, a0
+    lw t2, 0(t2)
+
+    
+
+    beqz t1, mul_done2
+    slli t3, a4, 2
+    add s0, t3, s0
+    lw t3, 0(s0)
+    j mul_t3
+mul_done2:
+    lw t3, 0(a1)
+    mv s0, a1
+mul_t3:
+
+    
+
+    li t4, 0
+    li t5, 0
+    bltz t2, t2_neg
+    j t2_checked
+t2_neg:
+    sub t2, x0, t2
+    xori t5, t5, 1
+t2_checked:
+
+    bltz t3, t3_neg
+    j t3_checked
+t3_neg:
+    sub t3, x0, t3
+    xori t5, t5, 1
+t3_checked:
+
+    li t6, 0
+mul_t2_t3_loop:
+    beq t6, t3, mul_done3
+    add t4, t4, t2
+    addi t6, t6, 1
+    j mul_t2_t3_loop
+mul_done3:
+    beq t5, x0, mul_end
+    sub t4, x0, t4
+mul_end:
+    add t0, t0, t4
+    addi t1, t1, 1
+    j loop_start
 
 loop_end:
     mv a0, t0
+    lw s0, 0(sp)
+    addi sp, sp, 4
     jr ra
 
 error_terminate:
